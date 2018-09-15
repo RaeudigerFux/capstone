@@ -1,1 +1,1 @@
-# capstone
+# excercise project for openHPI capstone 1 course 2018
