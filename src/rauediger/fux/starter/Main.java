@@ -1,9 +1,11 @@
 package rauediger.fux.starter;
 
+import processing.core.PApplet;
+
 public class Main {
 
 	public static void main(String[] args) {
-		System.out.println("Trying eGIT of Eclipse with github and HTTPS");
+		PApplet.main(Game.class.getName());
 	}
 
 }
