@@ -15,7 +15,7 @@ public class GameObject implements Observable {
 	private List<AbstractView> views = new ArrayList<AbstractView>();
 	private AbstractController controller;
 	private PApplet game;
-	private List<Observer> observers;
+	private List<Observer> observers = new ArrayList<Observer>();
 	
 	public GameObject(PApplet game, AbstractModel model, AbstractController controller, AbstractView view) {
 		this.game = game;
@@ -46,13 +46,14 @@ public class GameObject implements Observable {
 
 	@Override
 	public void notifyAllOberservers() {
-		// TODO Auto-generated method stub
-		
+		for (Observer observer : observers) {
+			observer.update(model.getPosition().x + "");
+		}
 	}
 
 	@Override
 	public void attachObserver(Observer observer) {
-		observers.add(observer);		
+		observers.add(observer);
 	}
 
 	@Override

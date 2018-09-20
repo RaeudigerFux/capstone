@@ -1,10 +1,8 @@
 package rauediger.fux.views;
 
 import processing.core.PApplet;
-import processing.core.PConstants;
 import rauediger.fux.models.AbstractModel;
 import rauediger.fux.models.PaddleModel;
-import rauediger.fux.models.PlainTextModel;
 import rauediger.fux.objects.Color;
 
 public class PaddleView extends AbstractView{

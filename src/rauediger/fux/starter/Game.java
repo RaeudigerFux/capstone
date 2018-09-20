@@ -20,21 +20,27 @@ public class Game extends PApplet {
 
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 640;
+	public enum EVENTS {
+		moveLeft, moveRight, updateScore
+	}; 
 
 	private PFont font;
 	private List<GameObject> gameObjects = new ArrayList<>();
+	private GameObject paddle;
 
 	public Game() {
-
-		GameObject scoreText = new GameObject(this,
-				new PlainTextModel(null, WIDTH / 2, HEIGHT / 2, "Hello openHPI", new Color(0, 0, 200)),
-				new PlainTextController(), 
-				new PlainTextSimpleView(this));
 
 		GameObject paddle = new GameObject(this,
 				new PaddleModel(null, (WIDTH / 2) - 50, HEIGHT - 25, new Dimension(100, 25), new Color(200, 0, 0)),
 				new PaddleController(),
 				new PaddleView(this));
+		
+		this.paddle = paddle;
+		
+		GameObject scoreText = new GameObject(this,
+				new PlainTextModel(paddle, WIDTH / 2, HEIGHT / 2, "Hello openHPI", new Color(0, 0, 200)),
+				new PlainTextController(), 
+				new PlainTextSimpleView(this));
 
 		gameObjects.add(scoreText);
 		gameObjects.add(paddle);
@@ -60,6 +66,12 @@ public class Game extends PApplet {
 		}
 	}
 
+	public void mouseClicked() {
+		paddle.getController().handleEvent(paddle, EVENTS.updateScore);
+	}
+	
+	
+	
 	/**
 	 * Sets the font to use to a given font and size
 	 * 

@@ -23,4 +23,9 @@ public class PaddleModel extends AbstractModel {
 		return dimension;
 	}
 
+	@Override
+	public void update(Object object) {
+		// TODO nothing to do yet		
+	}
+
 }

@@ -20,4 +20,13 @@ public class PlainTextModel extends AbstractModel {
 	public String getText() {
 		return this.text;
 	}
+
+	@Override
+	public void update(Object object) {
+		try {
+			this.text = (String) object;
+		} catch (ClassCastException e) {
+			// TODO some logging
+		}
+	}
 }
