@@ -1,30 +1,44 @@
 package rauediger.fux.starter;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
 import processing.core.*;
+import rauediger.fux.controller.PaddleController;
 import rauediger.fux.controller.PlainTextController;
+import rauediger.fux.models.PaddleModel;
 import rauediger.fux.models.PlainTextModel;
+import rauediger.fux.objects.Color;
 import rauediger.fux.objects.GameObject;
+import rauediger.fux.objects.Observable;
 import rauediger.fux.views.AbstractView;
+import rauediger.fux.views.PaddleView;
 import rauediger.fux.views.PlainTextSimpleView;
 
 public class Game extends PApplet {
 
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 640;
-	
+
 	private PFont font;
 	private List<GameObject> gameObjects = new ArrayList<>();
 
 	public Game() {
 
-		GameObject demoText = new GameObject(this,
-				new PlainTextModel(null, WIDTH / 2, HEIGHT / 2, "Hello openHPI", 0, 0, 200, 100), 
-				new PlainTextController(),
+		GameObject scoreText = new GameObject(this,
+				new PlainTextModel(null, WIDTH / 2, HEIGHT / 2, "Hello openHPI", new Color(0, 0, 200)),
+				new PlainTextController(), 
 				new PlainTextSimpleView(this));
-		gameObjects.add(demoText);
+
+		GameObject paddle = new GameObject(this,
+				new PaddleModel(null, (WIDTH / 2) - 50, HEIGHT - 25, new Dimension(100, 25), new Color(200, 0, 0)),
+				new PaddleController(),
+				new PaddleView(this));
+
+		gameObjects.add(scoreText);
+		gameObjects.add(paddle);
+
 	}
 
 	public void settings() {
