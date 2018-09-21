@@ -21,6 +21,7 @@ public class GameObject implements Observable {
 		this.game = game;
 		this.model = model;
 		this.controller = controller;
+		this.controller.setGameObject(this);
 		views.add(view);
 	}
 	

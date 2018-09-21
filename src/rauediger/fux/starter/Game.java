@@ -7,12 +7,11 @@ import java.util.List;
 import processing.core.*;
 import rauediger.fux.controller.PaddleController;
 import rauediger.fux.controller.PlainTextController;
+import rauediger.fux.models.Moveable;
 import rauediger.fux.models.PaddleModel;
 import rauediger.fux.models.PlainTextModel;
 import rauediger.fux.objects.Color;
 import rauediger.fux.objects.GameObject;
-import rauediger.fux.objects.Observable;
-import rauediger.fux.views.AbstractView;
 import rauediger.fux.views.PaddleView;
 import rauediger.fux.views.PlainTextSimpleView;
 
@@ -54,23 +53,41 @@ public class Game extends PApplet {
 	public void setup() {
 		// https://fontlibrary.org/de/font/some-time-later (open source)
 		setFont("ressources/sometimelater.otf", 64);
-
 		background(0);
+		frameRate(30);
 	}
 
 	public void draw() {
-		for (GameObject gameObject : gameObjects) {
-			for (AbstractView view : gameObject.getViews()) {
-				view.draw(gameObject.getModel());
-			}
+		// clear screen
+		fill(0);
+		rect(0, 0, WIDTH, HEIGHT);
+		
+		// handle user commands
+		if (keyPressed) {
+			handleKeyboardEvent(key);
+		}
+		
+		// draw all GameObjects
+		gameObjects.forEach(o -> o.getViews().forEach(v -> v.draw(o.getModel())));
+	}
+	
+	/*public void mouseMoved() {
+		// check direction of mouse and determine an event for paddle
+		Enum<EVENTS> event = lastMouseX > mouseX ? EVENTS.moveLeft : EVENTS.moveRight;
+		lastMouseX = mouseX; // remember position for next mouseMoved()
+		paddle.getController().handleEvent(event);
+	}*/
+	
+	public void handleKeyboardEvent(int key) {
+		switch (key) {
+		case 'a':
+			paddle.getController().handleEvent(EVENTS.moveLeft);
+			break;
+		case 'd':
+			paddle.getController().handleEvent(EVENTS.moveRight);
+			break;
 		}
 	}
-
-	public void mouseClicked() {
-		paddle.getController().handleEvent(paddle, EVENTS.updateScore);
-	}
-	
-	
 	
 	/**
 	 * Sets the font to use to a given font and size

@@ -5,6 +5,11 @@ import rauediger.fux.starter.Game.EVENTS;
 
 public abstract class AbstractController {
 
-	public abstract void handleEvent(GameObject gameObject, Enum<EVENTS> event); 
+	protected GameObject gameObject;
 	
+	public abstract void handleEvent(Enum<EVENTS> event);
+	
+	public void setGameObject(GameObject gameObject) {
+		this.gameObject = gameObject;
+	}	
 }
