@@ -6,7 +6,7 @@ import rauediger.fux.objects.Color;
 import rauediger.fux.objects.Observable;
 
 public abstract class AbstractModel extends Observer {
-	private Point position;
+	protected Point position;
 	private Color color;
 
 	protected AbstractModel(Observable gameobject, int posX, int posY) {

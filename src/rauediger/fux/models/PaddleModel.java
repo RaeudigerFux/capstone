@@ -1,11 +1,12 @@
 package rauediger.fux.models;
 
 import java.awt.Dimension;
+import java.awt.Rectangle;
 
 import rauediger.fux.objects.Color;
 import rauediger.fux.objects.Observable;
 
-public class PaddleModel extends AbstractModel implements Moveable {
+public class PaddleModel extends AbstractModel implements Moveable, Collidible {
 
 	private Dimension dimension;
 	private int speed;
@@ -14,8 +15,8 @@ public class PaddleModel extends AbstractModel implements Moveable {
 	public PaddleModel(Observable gameobject, int posX, int posY, Dimension dimension) {
 		super(gameobject, posX, posY);
 		this.dimension = dimension;
-		this.speed = 5;
-		this.directionH = 0;
+		speed = 5;
+		directionH = Moveable.STOP;
 	}
 
 	public PaddleModel(Observable gameobject, int posX, int posY, Dimension dimension, Color color) {
@@ -37,6 +38,10 @@ public class PaddleModel extends AbstractModel implements Moveable {
 
 	public int getDirectionH() {
 		return directionH;
+	}	
+
+	public void setDirectionH(int directionH) {
+		this.directionH = directionH;
 	}
 
 	@Override
@@ -44,4 +49,9 @@ public class PaddleModel extends AbstractModel implements Moveable {
 		// TODO nothing to do yet
 	}
 
+	@Override
+	public Rectangle getHitbox() {
+		return new Rectangle(position.x, position.y, dimension.width, dimension.height);
+	}
+	
 }

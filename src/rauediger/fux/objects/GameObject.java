@@ -6,6 +6,7 @@ import java.util.List;
 import processing.core.PApplet;
 import rauediger.fux.controller.AbstractController;
 import rauediger.fux.models.AbstractModel;
+import rauediger.fux.models.BallModel;
 import rauediger.fux.models.Observer;
 import rauediger.fux.views.AbstractView;
 
@@ -47,8 +48,10 @@ public class GameObject implements Observable {
 
 	@Override
 	public void notifyAllOberservers() {
-		for (Observer observer : observers) {
-			observer.update(model.getPosition().x + "");
+		if (model instanceof BallModel) {
+			for (Observer observer : observers) {
+				observer.update(String.valueOf(((BallModel) model).getTravelledDistance()));
+			}			
 		}
 	}
 
