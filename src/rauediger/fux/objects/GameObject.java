@@ -15,11 +15,9 @@ public class GameObject implements Observable {
 	private AbstractModel model;
 	private List<AbstractView> views = new ArrayList<AbstractView>();
 	private AbstractController controller;
-	private PApplet game;
 	private List<Observer> observers = new ArrayList<Observer>();
 	
-	public GameObject(PApplet game, AbstractModel model, AbstractController controller, AbstractView view) {
-		this.game = game;
+	public GameObject(AbstractModel model, AbstractController controller, AbstractView view) {
 		this.model = model;
 		this.controller = controller;
 		this.controller.setGameObject(this);

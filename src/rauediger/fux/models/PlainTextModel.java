@@ -23,10 +23,8 @@ public class PlainTextModel extends AbstractModel {
 
 	@Override
 	public void update(Object object) {
-		try {
+		if (object instanceof String) {
 			this.text = (String) object;
-		} catch (ClassCastException e) {
-			// TODO some logging
 		}
 	}
 }

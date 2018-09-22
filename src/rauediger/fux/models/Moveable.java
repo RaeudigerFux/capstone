@@ -11,8 +11,9 @@ public interface Moveable {
 	final static int UP = -1;
 	final static int DOWN = 1;
 	final static int STOP = 0;
-	
-	default void moveHorizontal(Point position, int speed, int direction, int edgeLeft, int edgeRight, Dimension objectDimension) {
+
+	default void moveHorizontal(Point position, int speed, int direction, int edgeLeft, int edgeRight,
+			Dimension objectDimension) {
 		int newX = position.x + speed * direction;
 		// move only if gameObject will not scroll out of viewport
 		if (newX >= edgeLeft && newX + objectDimension.getWidth() <= edgeRight) {
@@ -24,8 +25,9 @@ public interface Moveable {
 		int newY = position.y + speed * direction;
 		position.move(position.x, newY); // moving out of viewport is allowed
 	}
-	
-	default void move(Point position, int speed, int directionH, int directionV, Dimension objectDimension, Rectangle viewport) {
+
+	default void move(Point position, int speed, int directionH, int directionV, Dimension objectDimension,
+			Rectangle viewport) {
 		this.moveHorizontal(position, speed, directionH, viewport.x, (viewport.x + viewport.width), objectDimension);
 		this.moveVertical(position, speed, directionV, viewport.y, (viewport.y + viewport.height));
 	}

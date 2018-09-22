@@ -18,7 +18,7 @@ public class PlainTextSimpleView extends AbstractView {
 			Color c = model.getColor();
 			game.textAlign(PConstants.CENTER);
 			game.fill(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
-			game.text(model.getText(), model.getPosition().x, model.getPosition().y);					
+			game.text(model.getText(), model.getPosition().x, model.getPosition().y);
 		} catch (ClassCastException e) {
 			System.out.println(this.getClass().getName() + "--" + e.getMessage());
 		}

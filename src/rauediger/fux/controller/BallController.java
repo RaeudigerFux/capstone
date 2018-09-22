@@ -16,7 +16,7 @@ public class BallController extends AbstractController {
 			ball.move(ball.getPosition(), ball.getSpeed(), ball.getDirectionH(), ball.getDirectionV(), ball.getDimension(),
 					new Rectangle(0, 0, Game.WIDTH, Game.HEIGHT));
 			gameObject.notifyAllOberservers();
-		}	
+		}
 		if (event == EVENTS.toggleDirectionV) {
 			ball.toggleDirectionV();
 		}

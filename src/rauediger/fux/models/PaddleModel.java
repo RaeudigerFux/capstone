@@ -31,14 +31,14 @@ public class PaddleModel extends AbstractModel implements Moveable, Collidible {
 	public int getSpeed() {
 		return speed;
 	}
-	
+
 	public void setSpeed(int speed) {
 		this.speed = speed;
 	}
 
 	public int getDirectionH() {
 		return directionH;
-	}	
+	}
 
 	public void setDirectionH(int directionH) {
 		this.directionH = directionH;
@@ -53,5 +53,5 @@ public class PaddleModel extends AbstractModel implements Moveable, Collidible {
 	public Rectangle getHitbox() {
 		return new Rectangle(position.x, position.y, dimension.width, dimension.height);
 	}
-	
+
 }
