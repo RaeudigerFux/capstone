@@ -3,7 +3,6 @@ package rauediger.fux.objects;
 import java.util.ArrayList;
 import java.util.List;
 
-import processing.core.PApplet;
 import rauediger.fux.controller.AbstractController;
 import rauediger.fux.models.AbstractModel;
 import rauediger.fux.models.BallModel;
