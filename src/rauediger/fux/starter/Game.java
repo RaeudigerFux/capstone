@@ -9,15 +9,18 @@ import processing.core.*;
 import rauediger.fux.controller.BallController;
 import rauediger.fux.controller.PaddleController;
 import rauediger.fux.controller.PlainTextController;
+import rauediger.fux.controller.StarFieldController;
 import rauediger.fux.models.BallModel;
 import rauediger.fux.models.Moveable;
 import rauediger.fux.models.PaddleModel;
 import rauediger.fux.models.PlainTextModel;
+import rauediger.fux.models.StarFieldModel;
 import rauediger.fux.objects.Color;
 import rauediger.fux.objects.GameObject;
 import rauediger.fux.views.BallView;
 import rauediger.fux.views.PaddleView;
 import rauediger.fux.views.PlainTextSimpleView;
+import rauediger.fux.views.StarFieldView;
 
 public class Game extends PApplet {
 
@@ -25,7 +28,7 @@ public class Game extends PApplet {
 	public static final int HEIGHT = 800;
 
 	public enum EVENTS {
-		moveLeft, moveRight, automove, updateScore, toggleDirectionV
+		MOVE_LEFT, MOVE_RIGHT, AUTOMOVE, INCREASE_SCORE, TOGGLE_DIRECTION_VERT, INCREASE_SPEED
 	};
 
 	private PFont font;
@@ -35,9 +38,13 @@ public class Game extends PApplet {
 
 	private GameObject paddle;
 	private GameObject ball;
+	private GameObject background;
 	private boolean isGameRunning = false;
 
 	public Game() {
+
+		// a very very simple starfield as background
+		background = new GameObject(new StarFieldModel(null, 0, 0), new StarFieldController(), new StarFieldView(this));
 
 		// construct the objects for start scene
 		GameObject gameTitleText = new GameObject(
@@ -62,13 +69,16 @@ public class Game extends PApplet {
 		sceneStart.add(startText);
 
 		// construct the objects for game scene; paddle and ball are main gameObejcts
-		paddle = new GameObject(
-				new PaddleModel(null, (WIDTH / 2) - 50, HEIGHT - 25, new Dimension(100, 25), new Color(200, 0, 0)),
-				new PaddleController(), new PaddleView(this));
-
+	
 		ball = new GameObject(new BallModel(null, WIDTH / 2, HEIGHT / 2, new Dimension(15, 15), new Color(0, 200, 150)),
 				new BallController(), new BallView(this));
-
+		
+		// observes the ball
+		paddle = new GameObject(
+				new PaddleModel(ball, (WIDTH / 2) - 50, HEIGHT - 25, new Dimension(100, 25), new Color(200, 0, 0)),
+				new PaddleController(), new PaddleView(this));
+	
+		// observes the ball
 		GameObject scoreText = new GameObject(new PlainTextModel(ball, WIDTH / 2, HEIGHT / 2, "0", new Color(0, 0, 200)),
 				new PlainTextController(), new PlainTextSimpleView(this));
 
@@ -78,16 +88,16 @@ public class Game extends PApplet {
 
 		// construct the objects for game over scene
 		GameObject gameOverText = new GameObject(
-				new PlainTextModel(null, WIDTH / 2, HEIGHT / 2 - 200, "GAME OVER", new Color(200, 0, 0)), new PlainTextController(),
-				new PlainTextSimpleView(this));
-		
+				new PlainTextModel(null, WIDTH / 2, HEIGHT / 2 - 200, "GAME OVER", new Color(200, 0, 0)),
+				new PlainTextController(), new PlainTextSimpleView(this));
+
 		GameObject gameOverScoreText = new GameObject(
-				new PlainTextModel(null, WIDTH / 2, HEIGHT / 2 - 100, "your score is", new Color(0, 0, 200)), new PlainTextController(),
-				new PlainTextSimpleView(this));
+				new PlainTextModel(null, WIDTH / 2, HEIGHT / 2 - 100, "your score is", new Color(0, 0, 200)),
+				new PlainTextController(), new PlainTextSimpleView(this));
 
 		sceneGameOver.add(gameOverText);
 		sceneGameOver.add(gameOverScoreText);
-		sceneGameOver.add(scoreText);		
+		sceneGameOver.add(scoreText);
 
 	}
 
@@ -103,9 +113,11 @@ public class Game extends PApplet {
 	}
 
 	public void draw() {
-		// clear screen
+		// clear screen and draw background
 		fill(0);
 		rect(0, 0, WIDTH, HEIGHT);
+		background.getController().handleEvent(EVENTS.AUTOMOVE);
+		background.getViews().forEach(v -> v.draw(background.getModel()));	
 
 		// handle user commands
 		if (keyPressed) {
@@ -114,7 +126,7 @@ public class Game extends PApplet {
 
 		// move the ball
 		if (isGameRunning && ((BallModel) ball.getModel()).isAlive()) {
-			ball.getController().handleEvent(EVENTS.automove);
+			ball.getController().handleEvent(EVENTS.AUTOMOVE);
 		}
 
 		// draw the active scene
@@ -133,10 +145,10 @@ public class Game extends PApplet {
 	private void handleKeyboardEvent(int key) {
 		switch (key) {
 		case 'a':
-			paddle.getController().handleEvent(EVENTS.moveLeft);
+			paddle.getController().handleEvent(EVENTS.MOVE_LEFT);
 			break;
 		case 'd':
-			paddle.getController().handleEvent(EVENTS.moveRight);
+			paddle.getController().handleEvent(EVENTS.MOVE_RIGHT);
 			break;
 		case 32:
 			isGameRunning = true;
@@ -152,7 +164,7 @@ public class Game extends PApplet {
 		Rectangle hitboxBall = ((BallModel) ball.getModel()).getHitbox();
 		Rectangle hitboxPaddle = ((PaddleModel) paddle.getModel()).getHitbox();
 		if (hitboxBall.intersects(hitboxPaddle)) {
-			ball.getController().handleEvent(EVENTS.toggleDirectionV);
+			ball.getController().handleEvent(EVENTS.TOGGLE_DIRECTION_VERT);
 			((BallModel) ball.getModel()).setDirectionH(((PaddleModel) paddle.getModel()).getDirectionH());
 		}
 	}

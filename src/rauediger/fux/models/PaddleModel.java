@@ -15,7 +15,7 @@ public class PaddleModel extends AbstractModel implements Moveable, Collidible {
 	public PaddleModel(Observable gameobject, int posX, int posY, Dimension dimension) {
 		super(gameobject, posX, posY);
 		this.dimension = dimension;
-		speed = 5;
+		speed = 10;
 		directionH = Moveable.STOP;
 	}
 
@@ -46,7 +46,9 @@ public class PaddleModel extends AbstractModel implements Moveable, Collidible {
 
 	@Override
 	public void update(Object object) {
-		// TODO nothing to do yet
+		if (object instanceof Integer) {
+			speed = speed + (Integer) object;
+		}
 	}
 
 	@Override

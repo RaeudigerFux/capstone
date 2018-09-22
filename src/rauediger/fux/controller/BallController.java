@@ -12,13 +12,14 @@ public class BallController extends AbstractController {
 	public void handleEvent(Enum<EVENTS> event) {
 		BallModel ball = (BallModel) gameObject.getModel(); // not try/catch, getting model from its own gameObject
 
-		if (event == EVENTS.automove) {
+		if (event == EVENTS.AUTOMOVE) {
 			ball.move(ball.getPosition(), ball.getSpeed(), ball.getDirectionH(), ball.getDirectionV(), ball.getDimension(),
 					new Rectangle(0, 0, Game.WIDTH, Game.HEIGHT));
-			gameObject.notifyAllOberservers();
+			gameObject.notifyAllOberservers(EVENTS.INCREASE_SCORE);
 		}
-		if (event == EVENTS.toggleDirectionV) {
+		if (event == EVENTS.TOGGLE_DIRECTION_VERT) {
 			ball.toggleDirectionV();
+			gameObject.notifyAllOberservers(EVENTS.INCREASE_SPEED);
 		}
 	}
 
