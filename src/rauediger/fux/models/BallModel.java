@@ -53,6 +53,10 @@ public class BallModel extends AbstractModel implements Moveable, Collidible {
 	public int getTravelledDistance() {
 		return travelledDistance;
 	}
+	
+	public void setTravelledDistance(int travelledDistance) {
+		this.travelledDistance = travelledDistance;
+	}
 
 	public boolean isAlive() {
 		return isAlive;

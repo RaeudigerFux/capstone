@@ -68,4 +68,9 @@ public class GameObject implements Observable {
 		observers.remove(observer);
 	}
 
+	@Override
+	public List<Observer> getObservers() {
+		return observers;
+	}
+
 }

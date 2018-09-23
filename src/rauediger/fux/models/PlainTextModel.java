@@ -21,6 +21,10 @@ public class PlainTextModel extends AbstractModel {
 		return this.text;
 	}
 
+	public void setText(String text) {
+		this.text = text;
+	}
+
 	@Override
 	public void update(Object object) {
 		if (object instanceof String) {

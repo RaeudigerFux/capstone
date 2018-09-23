@@ -39,7 +39,11 @@ public class Game extends PApplet {
 	private GameObject paddle;
 	private GameObject ball;
 	private GameObject background;
+	private GameObject scoreText;
+	private GameObject ballCounterText;
+
 	private boolean isGameRunning = false;
+	private int lives = 3;
 
 	public Game() {
 
@@ -69,20 +73,23 @@ public class Game extends PApplet {
 		sceneStart.add(startText);
 
 		// construct the objects for game scene; paddle and ball are main gameObejcts
-	
-		ball = new GameObject(new BallModel(null, WIDTH / 2, HEIGHT / 2, new Dimension(15, 15), new Color(0, 200, 150)),
-				new BallController(), new BallView(this));
-		
+
+		ball = createNewBall();
+
 		// observes the ball
 		paddle = new GameObject(
 				new PaddleModel(ball, (WIDTH / 2) - 50, HEIGHT - 25, new Dimension(100, 25), new Color(200, 0, 0)),
 				new PaddleController(), new PaddleView(this));
-	
+
 		// observes the ball
-		GameObject scoreText = new GameObject(new PlainTextModel(ball, WIDTH / 2, HEIGHT / 2, "0", new Color(0, 0, 200)),
+		scoreText = new GameObject(new PlainTextModel(ball, WIDTH / 2, HEIGHT / 2, "0", new Color(0, 0, 200)),
+				new PlainTextController(), new PlainTextSimpleView(this));
+
+		ballCounterText = new GameObject(new PlainTextModel(null, 175, 75, getNewBallCounterText(), new Color(0, 200, 150)),
 				new PlainTextController(), new PlainTextSimpleView(this));
 
 		sceneGame.add(scoreText);
+		sceneGame.add(ballCounterText);
 		sceneGame.add(paddle);
 		sceneGame.add(ball);
 
@@ -98,7 +105,11 @@ public class Game extends PApplet {
 		sceneGameOver.add(gameOverText);
 		sceneGameOver.add(gameOverScoreText);
 		sceneGameOver.add(scoreText);
+	}
 
+	private GameObject createNewBall() {
+		return new GameObject(new BallModel(null, WIDTH / 2, HEIGHT / 2, new Dimension(15, 15), new Color(0, 200, 150)),
+				new BallController(), new BallView(this));
 	}
 
 	public void settings() {
@@ -117,7 +128,7 @@ public class Game extends PApplet {
 		fill(0);
 		rect(0, 0, WIDTH, HEIGHT);
 		background.getController().handleEvent(EVENTS.AUTOMOVE);
-		background.getViews().forEach(v -> v.draw(background.getModel()));	
+		background.getViews().forEach(v -> v.draw(background.getModel()));
 
 		// handle user commands
 		if (keyPressed) {
@@ -125,21 +136,42 @@ public class Game extends PApplet {
 		}
 
 		// move the ball
-		if (isGameRunning && ((BallModel) ball.getModel()).isAlive()) {
+		if (isGameRunning && ((BallModel) ball.getModel()).isAlive() && lives >= 0) {
 			ball.getController().handleEvent(EVENTS.AUTOMOVE);
 		}
 
 		// draw the active scene
 		if (!isGameRunning) {
 			sceneStart.forEach(o -> o.getViews().forEach(v -> v.draw(o.getModel())));
-		} else if (!((BallModel) ball.getModel()).isAlive()) {
+		} else if (lives < 0) {
 			sceneGameOver.forEach(o -> o.getViews().forEach(v -> v.draw(o.getModel())));
+		} else if (!((BallModel) ball.getModel()).isAlive()) {
+			handleLostBall();
 		} else if (isGameRunning) {
 			sceneGame.forEach(o -> o.getViews().forEach(v -> v.draw(o.getModel())));
 		}
 
 		// simplest collision check
 		checkCollision();
+	}
+
+	private void handleLostBall() {
+		if (lives-- >= 0) {
+			sceneGame.remove(ball);
+
+			// new Ball
+			GameObject newBall = createNewBall();
+			((BallModel) newBall.getModel()).setTravelledDistance(((BallModel) ball.getModel()).getTravelledDistance());
+			newBall.attachObserver(paddle.getModel());
+			newBall.attachObserver(scoreText.getModel());
+			sceneGame.add(newBall);
+			ball = newBall;
+			((PlainTextModel) ballCounterText.getModel()).setText(getNewBallCounterText());
+		}
+	}
+
+	private String getNewBallCounterText() {
+		return "Balls left: " + lives;
 	}
 
 	private void handleKeyboardEvent(int key) {
