@@ -5,7 +5,7 @@ import rauediger.fux.models.AbstractModel;
 
 public abstract class AbstractView {
 
-	PApplet game;
+	protected PApplet game;
 
 	protected AbstractView(PApplet game) {
 		this.game = game;
